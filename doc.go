@@ -1,15 +1,8 @@
 /*
-Package cron implements a cron spec parser and job runner.
 
-Installation
+PENDING... DOCUMENTATION!
 
-To download the specific tagged release, run:
-
-	go get github.com/robfig/cron/v3@v3.0.0
-
-Import it in your program as:
-
-	import "github.com/robfig/cron/v3"
+package agenda extends the cron package, which is spec parser and job runner.
 
 It requires Go 1.11 or later due to usage of Go Modules.
 
@@ -18,7 +11,7 @@ Usage
 Callers may register Funcs to be invoked on a given schedule.  Cron will run
 them in their own goroutines.
 
-	c := cron.New()
+	c := agenda.New()
 	c.AddFunc("30 * * * *", func() { fmt.Println("Every hour on the half hour") })
 	c.AddFunc("30 3-6,20-23 * * *", func() { fmt.Println(".. in the range 3-6am, 8-11pm") })
 	c.AddFunc("CRON_TZ=Asia/Tokyo 30 04 * * *", func() { fmt.Println("Runs at 04:30 Tokyo time every day") })
@@ -59,16 +52,16 @@ Alternative Formats
 Alternative Cron expression formats support other fields like seconds. You can
 implement that by creating a custom Parser as follows.
 
-	cron.New(
-		cron.WithParser(
-			cron.NewParser(
-				cron.SecondOptional | cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow | cron.Descriptor)))
+	agenda.New(
+		agenda.WithParser(
+			agenda.NewParser(
+				agenda.SecondOptional | agenda.Minute | agenda.Hour | agenda.Dom | agenda.Month | agenda.Dow | agenda.Descriptor)))
 
 Since adding Seconds is the most common modification to the standard cron spec,
 cron provides a builtin function to do that, which is equivalent to the custom
 parser you saw earlier, except that its seconds field is REQUIRED:
 
-	cron.New(cron.WithSeconds())
+	agenda.New(agenda.WithSeconds())
 
 That emulates Quartz, the most popular alternative Cron schedule format:
 http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger.html
@@ -139,8 +132,8 @@ Time zones
 By default, all interpretation and scheduling is done in the machine's local
 time zone (time.Local). You can specify a different time zone on construction:
 
-      cron.New(
-          cron.WithLocation(time.UTC))
+      agenda.New(
+          agenda.WithLocation(time.UTC))
 
 Individual cron schedules may also override the time zone they are to be
 interpreted in by providing an additional space-separated field at the beginning
@@ -149,18 +142,18 @@ of the cron spec, of the form "CRON_TZ=Asia/Tokyo".
 For example:
 
 	# Runs at 6am in time.Local
-	cron.New().AddFunc("0 6 * * ?", ...)
+	agenda.New().AddFunc("0 6 * * ?", ...)
 
 	# Runs at 6am in America/New_York
 	nyc, _ := time.LoadLocation("America/New_York")
-	c := cron.New(cron.WithLocation(nyc))
+	c := agenda.New(agenda.WithLocation(nyc))
 	c.AddFunc("0 6 * * ?", ...)
 
 	# Runs at 6am in Asia/Tokyo
-	cron.New().AddFunc("CRON_TZ=Asia/Tokyo 0 6 * * ?", ...)
+	agenda.New().AddFunc("CRON_TZ=Asia/Tokyo 0 6 * * ?", ...)
 
 	# Runs at 6am in Asia/Tokyo
-	c := cron.New(cron.WithLocation(nyc))
+	c := agenda.New(agenda.WithLocation(nyc))
 	c.SetLocation("America/New_York")
 	c.AddFunc("CRON_TZ=Asia/Tokyo 0 6 * * ?", ...)
 
@@ -180,16 +173,16 @@ to achieve the following effects:
   - Skip a job's execution if the previous run hasn't completed yet
   - Log each job's invocations
 
-Install wrappers for all jobs added to a cron using the `cron.WithChain` option:
+Install wrappers for all jobs added to a cron using the `agenda.WithChain` option:
 
-	cron.New(cron.WithChain(
-		cron.SkipIfStillRunning(logger),
+	agenda.New(agenda.WithChain(
+		agenda.SkipIfStillRunning(logger),
 	))
 
 Install wrappers for individual jobs by explicitly wrapping them:
 
-	job = cron.NewChain(
-		cron.SkipIfStillRunning(logger),
+	job = agenda.NewChain(
+		agenda.SkipIfStillRunning(logger),
 	).Then(job)
 
 Thread safety
@@ -212,9 +205,9 @@ For additional insight into Cron operations, verbose logging may be activated
 which will record job runs, scheduling decisions, and added or removed jobs.
 Activate it with a one-off logger as follows:
 
-	cron.New(
-		cron.WithLogger(
-			cron.VerbosePrintfLogger(log.New(os.Stdout, "cron: ", log.LstdFlags))))
+	agenda.New(
+		agenda.WithLogger(
+			agenda.VerbosePrintfLogger(log.New(os.Stdout, "cron: ", log.LstdFlags))))
 
 
 Implementation
@@ -228,4 +221,4 @@ Upon waking:
  - it re-sorts the array of entries by next activation time.
  - it goes to sleep until the soonest job.
 */
-package cron
+package agenda
