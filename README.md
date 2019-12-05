@@ -1,7 +1,4 @@
-Under development! Experimental stage
-Todo:
-	* Tests
-	* Benchmark
+Under development! Experimental stage. Agenda package adds a couple of milliseconds to the original cron (less than 100ms).
 
 For general cron functions, refer to [![GoDoc](http://godoc.org/github.com/robfig/cron?status.png)](http://godoc.org/github.com/robfig/cron)
 
@@ -37,14 +34,15 @@ the default format accepted, and the Quartz format is opt-in.
 In additional, if user selects the agenda parser instead, you can do:
 
 #### Select the days of the year (DoY). A list of MM/DD can be passed inside the []
-	@doy [12/04 03/02] * * *        <-- Default parser
-	@doy [12/04 03/02] * * * *      <-- Quartz format which includes the seconds
+	@doy [12/04 03/02] * *         <-- Default parser
+	@doy [12/04 03/02] * * *       <-- Quartz format which includes the seconds
+ Obs: the dates do not need to be sorted.
 
 #### Select the *at* a specific date
 	@at 2019-12-02T15:04:05Z
 	@at 2020-02-29T15:04:05-03:00
  Obs: Command "at" is now using the RFC3339 format.
- Only one date can be passed
+      Only one date can be passed
 
 #### Add a delay to the schedule. Delay is give by a "+<time.ParseDuration>"
 	+14m21s */10 * * * *                  <-- Default parser
