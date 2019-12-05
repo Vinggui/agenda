@@ -1,7 +1,4 @@
-Under development! Experimental stage
-Todo:
-	* Tests
-	* Benchmark
+Under development! Experimental stage. Agenda package adds a couple of milliseconds to the original cron (20-40ms).
 
 For general cron functions, refer to [![GoDoc](http://godoc.org/github.com/robfig/cron?status.png)](http://godoc.org/github.com/robfig/cron)
 
