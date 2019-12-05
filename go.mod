@@ -1,4 +1,4 @@
-module github.com/Vinggui;agenda
+module github.com/Vinggui/agenda
 
 go 1.13
 

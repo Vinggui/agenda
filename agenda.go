@@ -12,21 +12,20 @@ var (
 	ErrPastDate  = errors.New("input date is already in the past")
 )
 
-func copySchedules(schAgenda *SpecAgenda, schDefault Schedule) {
-	defaultSchedule := schDefault.(*SpecSchedule)
-	schAgenda.Second = defaultSchedule.Second
-	schAgenda.Minute = defaultSchedule.Minute
-	schAgenda.Hour = defaultSchedule.Hour
-	schAgenda.Dom = defaultSchedule.Dom
-	schAgenda.Month = defaultSchedule.Month
-	schAgenda.Dow = defaultSchedule.Dow
-	schAgenda.Location = defaultSchedule.Location
+func copySpecSchedules(schAgenda *SpecAgenda, sch Schedule) {
+	defaultSchedule := sch.(*SpecSchedule)
+	schAgenda.SpecSchedule = *defaultSchedule
+}
+
+func copyDelaySchedules(schAgenda *SpecAgenda, sch Schedule) {
+	defaultSchedule := sch.(ConstantDelaySchedule)
+	schAgenda.ConstantDelaySchedule = defaultSchedule
 }
 
 /*
-Parse extends the entries provided by cron package
+ParseAgenda extends the entries provided by cron package
 */
-func (c *Cron) Parse(spec string) (sch Schedule, err error) {
+func (c *Cron) ParseAgenda(spec string) (sch Schedule, err error) {
 	//The +<duration> indicates a delays to start the following specs.
 	// <duration> is expressed in time. (readable for time.ParseDuration)
 
@@ -38,7 +37,7 @@ func (c *Cron) Parse(spec string) (sch Schedule, err error) {
 	sch = customSchedule
 	if strings.HasPrefix(spec, "+") {
 		SpecStartPoint := strings.Index(spec, " ")
-		customSchedule.Delay, err = time.ParseDuration(spec[1:SpecStartPoint])
+		customSchedule.Wait, err = time.ParseDuration(spec[1:SpecStartPoint])
 		if err != nil {
 			return
 		}
@@ -60,9 +59,10 @@ func (c *Cron) Parse(spec string) (sch Schedule, err error) {
 		if err != nil {
 			return
 		}
-		copySchedules(customSchedule, genericSchedule)
+		copySpecSchedules(customSchedule, genericSchedule)
 
 		customSchedule.DoY = dates
+		customSchedule.Type = SchDoY
 
 		return customSchedule, nil
 	} else if strings.HasPrefix(spec, "@at") {
@@ -79,6 +79,7 @@ func (c *Cron) Parse(spec string) (sch Schedule, err error) {
 			return
 		}
 
+		customSchedule.Type = SchAt
 		return
 
 	} else {
@@ -87,7 +88,14 @@ func (c *Cron) Parse(spec string) (sch Schedule, err error) {
 		if err != nil {
 			return
 		}
-		copySchedules(customSchedule, genericSchedule)
+
+		if _, ok := genericSchedule.(*SpecSchedule); ok {
+			copySpecSchedules(customSchedule, genericSchedule)
+			customSchedule.Type = SchDefaultCron
+		} else {
+			copyDelaySchedules(customSchedule, genericSchedule)
+			customSchedule.Type = SchConstantDelay
+		}
 		return
 	}
 }

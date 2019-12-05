@@ -135,6 +135,12 @@ type FuncJob func()
 
 func (f FuncJob) Run() { f() }
 
+// Parse exposes the actual parser in use. The default would be the standardParser,
+// but if the client creates a new one, this exposes its functoinality.
+func (c *Cron) Parse(spec string) (sch Schedule, err error) {
+	return c.parser.Parse(spec)
+}
+
 // AddFunc adds a func to the Cron to be run on the given schedule.
 // The spec is parsed using the time zone of this Cron instance as the default.
 // An opaque ID is returned that can be used to later remove it.
