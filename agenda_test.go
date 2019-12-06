@@ -54,7 +54,7 @@ func TestParseAgenda(t *testing.T) {
 		actualTime := actualParse.Next(timeNow)
 		targetTime := c.expected.Next(timeNow)
 		if actualTime != targetTime {
-			t.Errorf("%s => \nexpected\t%s \ngot\t\t%s", c.expr, targetTime.String(), actualTime.String())
+			t.Errorf("\t%s \"%s\" => \nexpected\t%s \ngot\t\t%s", timeNow.String(), c.expr, targetTime.String(), actualTime.String())
 		}
 
 		// if !reflect.DeepEqual(actual, c.expected) {

@@ -31,9 +31,7 @@ type SpecAgenda struct {
 // time.  If no time can be found to satisfy the schedule, return the zero time.
 func (s *SpecAgenda) Next(t time.Time) (next time.Time) {
 	//Consider delay variable
-	if s.Wait != 0 {
-		t = t.Add(s.Wait)
-	}
+	t = t.Add(-s.Wait)
 
 	switch s.Type {
 	case SchDoY:
@@ -48,14 +46,12 @@ func (s *SpecAgenda) Next(t time.Time) (next time.Time) {
 		}
 		next = date
 	case SchConstantDelay:
-		next = s.ConstantDelaySchedule.Next(t)
+		next = s.ConstantDelaySchedule.Next(t.Add(s.Wait))
 	case SchDefaultCron:
 		next = s.SpecSchedule.Next(t)
 	}
 
-	if s.Wait != 0 {
-		next = next.Add(s.Wait)
-	}
+	next = next.Add(s.Wait)
 	return
 }
 
