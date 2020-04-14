@@ -1,3 +1,6 @@
+/*
+Agenda is a job scheduler package which expands cron functionalities
+*/
 package agenda
 
 import (
