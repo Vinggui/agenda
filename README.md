@@ -7,7 +7,7 @@ For general cron functions, refer to [![GoDoc](http://godoc.org/github.com/robfi
 For those using this module as a submodule, Golang (as far as version 1.14) creates a big headache for forked projects.
 Hence, it's necessary to add the following code to **your** `go.mod` file.
 ```
-replace github.com/Vinggui/agenda => github.com/Vinggui/agenda v0.1.4
+replace github.com/Vinggui/agenda => github.com/Vinggui/agenda v0.1.5
 ```
 
 # agenda
