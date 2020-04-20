@@ -44,8 +44,10 @@ func (c *Cron) ParseAgenda(spec string) (sch Schedule, err error) {
 		if err != nil {
 			return
 		}
+		customSchedule.FirstExec = true;
+
+		//Cut off the delay from the spec
 		spec = spec[SpecStartPoint+1:]
-		// customSchedule.Delay = delay
 	}
 
 	var genericSchedule Schedule
