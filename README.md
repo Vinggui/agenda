@@ -2,14 +2,6 @@ Under development! Experimental stage. Agenda package adds processing time to th
 
 For general cron functions, refer to [![GoDoc](http://godoc.org/github.com/robfig/cron?status.png)](http://godoc.org/github.com/robfig/cron)
 
-**Important**
-
-For those using this module as a submodule, Golang (as far as version 1.14) creates a big headache for forked projects.
-Hence, it's necessary to add the following code to **your** `go.mod` file.
-```
-replace github.com/Vinggui/agenda => github.com/Vinggui/agenda v0.1.5
-```
-
 # agenda
 To download agenda
 	go get github.com/Vinggui/agenda
